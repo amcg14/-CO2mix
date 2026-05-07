@@ -13,7 +13,10 @@ class EntetesColonnes:
       else:
         s.append(new)
         new = ""
+      return s
+
+  def trouverIndex(self, nom_colonne):
+    pass
 
   
 
-print()
