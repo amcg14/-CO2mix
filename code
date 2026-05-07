@@ -1,3 +1,19 @@
 import matplotlib.pyplot as pl
 
+class EntetesColonnes:
+  def __init__(self,ligne1):
+    self.__ligne = ligne1
+
+  def separateur(self):
+    s = []
+    new = ""
+    for i in self.__ligne:
+      if i != "," and i != ";":
+        new = new + i
+      else:
+        s.append(new)
+        new = ""
+
+  
+
 print()
