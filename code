@@ -15,8 +15,13 @@ class EntetesColonnes:
         new = ""
       return s
 
-  def trouverIndex(self, nom_colonne):
-    pass
+    def trouverIndex(self, nom_colonne):
+    s = self.separateur()
+    index = -1
+    for i in s:
+        index = index+1
+        if i == nom_colonne:
+            return(index)
 
   
 
