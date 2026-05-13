@@ -3,19 +3,20 @@ import matplotlib.pyplot as pl
 class EntetesColonnes:
   def __init__(self,ligne1):
     self.__ligne = ligne1
+    print(self.__ligne)
 
   def separateur(self):
     s = []
-    new = ""
-    for i in self.__ligne:
-      if i != "," and i != ";":
-        new = new + i
+    new =""
+    for i in range(3,(len(self.__ligne))):
+      if self.__ligne[i] != "," and self.__ligne[i] != ";":
+        new = new + self.__ligne[i]
       else:
         s.append(new)
         new = ""
-      return s
+    return s
 
-    def trouverIndex(self, nom_colonne):
+  def trouverIndex(self, nom_colonne):
     s = self.separateur()
     index = -1
     for i in s:
