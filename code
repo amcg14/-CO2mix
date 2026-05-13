@@ -22,24 +22,45 @@ class EntetesColonnes:
         index = index+1
         if i == nom_colonne:
             return(index)
-ef construire_agregats_annuels(liste, entetes,
+
+
+
+class AgregateurAnnuel:
+    def __init__(self,zgeo,tinfo,annees,values):
+        self.__zgeo = zgeo
+        self.__tinfo = tinfo
+        self.__annees = annees
+        self.__values =values
+        self.__a = dict()
+        for i in range(0,len(annees)):
+            self.__a.update({annees[i]:values[i]})
+        
+        
+        
+        
+        
+def construire_agregats_annuels(liste, entetes,
                                 nom, dictionnaire):
-
-    consommation = AgregateurAnnuel()
-    production_renouvelable = AgregateurAnnuel()
-    production_totale = AgregateurAnnuel()
-
-    idx_region = entetes.trouverIndex("Code INSEE région")
+ 
+    idx_region = entetes.trouverIndex("Code INSEE rÃ©gion")
     idx_conso = entetes.trouverIndex("Consommation (MW)")
     idx_solaire = entetes.trouverIndex("Solaire (MW)")
     idx_eolienne = entetes.trouverIndex("Eolien (MW)")
     idx_hydraulique = entetes.trouverIndex("Hydraulique (MW)")
-    idx_nucleaire = entetes.trouverIndex("Nucléaire (MW)")
-    idx_date = entetes.trouverIndex("
+    idx_nucleaire = entetes.trouverIndex("NuclÃ©aire (MW)")
+    idx_date = entetes.trouverIndex("Date")
+    
+    annees =[2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024]
+    sommeconso = [0,0,0,0,0,0,0,0,0,0,0,0]
+    sommereno = [0,0,0,0,0,0,0,0,0,0,0,0]
+    sommeprod = [0,0,0,0,0,0,0,0,0,0,0,0]
+    
     for ligne in liste:
 
-        colonnes = ligne.strip().split(entetes.separateur())
-
+        colonnes = ligne.strip().split(";")
+        
+        
+#entetes.separateur()
         region = colonnes[idx_region]
 
         # filtrage région
@@ -60,21 +81,26 @@ ef construire_agregats_annuels(liste, entetes,
         renouvelable = (
             float(colonnes[idx_solaire]) +
             float(colonnes[idx_eolienne]) +
-            float(colonnes[idx_hydraulique])+
-            float(colonnes[idx_Date])
-        )
-
+            float(colonnes[idx_hydraulique]))
         totale = renouvelable + float(colonnes[idx_nucleaire])
-
+        
+        for i in range(0,len(annees)):
+            if str(annees[i]) in colonnes[idx_date]:
+                sommeconso[i] += conso
+                sommereno[i] += renouvelable
+                sommeprod[i] += totale
+        
+                
+                
+        
+    consommation = AgregateurAnnuel(nom,"consommation",[2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024],sommeconso)
+    production_renouvelable = AgregateurAnnuel(nom,"production renouvelable",[2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024],sommereno)
+    production_totale = AgregateurAnnuel(nom,"production totale",[2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024],sommeprod)
         # ajout dans les agrégateurs
-        consommation.ajouter(conso)
-        production_renouvelable.ajouter(renouvelable)
-        production_totale.ajouter(totale)
 
     return (
         consommation,
         production_renouvelable,
         production_totale
-    )
 
 
