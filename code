@@ -23,9 +23,10 @@ class EntetesColonnes:
         index = index+1
         if i == nom_colonne:
             return(index)
+
+
 # 6. Graphiques et analyses à produire
 #6.1 Fonction tracer_série(…)
-import matplotlib.pyplot as pl
 def tracer_série(titre_graphique, titre_axe_X, titre_axe_Y, liste_donnees):
     # Création de 3 séries de données artificielles
     for i in range (len(liste_donnees)):
@@ -54,7 +55,26 @@ class AgregateurAnnuel:
         self.__a = dict()
         for i in range(0,len(annees)):
             self.__a.update({annees[i]:values[i]})
+
+                
+    def ajouter(self,new,annee):
+        if annee in self.__a:
+            x = self.__a[annee]
+            self.__a.update({annee:x+new})
+        else:
+            self.__a.update({annee:new})
         
+
+    def obtenir_serie(self):
+        donnes = []
+        for i in self.__a:
+            donne = []
+            donne.append(i)
+            print(donne)
+            donne.append(self.__a[i])
+            print(donne)
+            donnes.append(donnes)
+            print(donnes)
         
         
         
