@@ -25,26 +25,6 @@ class EntetesColonnes:
             return(index)
 
 
-# 6. Graphiques et analyses à produire
-#6.1 Fonction tracer_série(…)
-def tracer_série(titre_graphique, titre_axe_X, titre_axe_Y, liste_donnees):
-    # Création de 3 séries de données artificielles
-    for i in range (len(liste_donnees)):
-        m=1
-        serie[m]=liste_donnees[i]
-        X[m]=(serie[m])[2]
-        Y[m]=(serie[m])[2]
-        plt.figure()
-        plt.plot(X[m],Y[m],label='serie[m] ')
-        plt.title("Exemple de visualisation")
-        plt.xlabel("titre_axe_X")
-        plt.ylabel("titre_axe_Y")
-        plt.grid(True)
-        plt.legend()
-        m+=1
-# Affichage du graphique
-plt.show()
-
 
 class AgregateurAnnuel:
     def __init__(self,zgeo,tinfo,annees,values):
@@ -65,16 +45,17 @@ class AgregateurAnnuel:
             self.__a.update({annee:new})
         
 
-    def obtenir_serie(self):
+        def obtenir_serie(self):
         donnes = []
+        donnes.append(self.__tinfo)
+        donnean = []
+        donneval = []
         for i in self.__a:
-            donne = []
-            donne.append(i)
-            print(donne)
-            donne.append(self.__a[i])
-            print(donne)
-            donnes.append(donnes)
-            print(donnes)
+            donnean.append(i)
+            donneval.append(self.__a[i])
+        donnes.append(donnean)
+        donnes.append(donneval)
+        return(donnes)
         
         
         
@@ -142,5 +123,27 @@ def construire_agregats_annuels(liste, entetes,
         consommation,
         production_renouvelable,
         production_totale
+
+
+def tracer_série(titre_graphique, titre_axe_X, titre_axe_Y, liste_donnees):
+    # Création de 3 séries de données artificielles
+    plt.figure()
+    print(liste_donnees)
+    for i in range (len(liste_donnees)):
+        m=0
+        X=liste_donnees[1]
+        Y=liste_donnees[2]
+        plt.plot(X,Y)
+        plt.title("Exemple de visualisation")
+        plt.xlabel("titre_axe_X")
+        plt.ylabel("titre_axe_Y")
+        plt.grid(True)
+        plt.legend()
+            
+    # Affichage du graphique
+    plt.show()
+
+
+
 
 
