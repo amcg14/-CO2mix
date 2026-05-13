@@ -22,7 +22,7 @@ class EntetesColonnes:
         index = index+1
         if i == nom_colonne:
             return(index)
-def construire_agregats_annuels(liste, entetes,
+ef construire_agregats_annuels(liste, entetes,
                                 nom, dictionnaire):
 
     consommation = AgregateurAnnuel()
@@ -35,7 +35,7 @@ def construire_agregats_annuels(liste, entetes,
     idx_eolienne = entetes.trouverIndex("Eolien (MW)")
     idx_hydraulique = entetes.trouverIndex("Hydraulique (MW)")
     idx_nucleaire = entetes.trouverIndex("Nucléaire (MW)")
-
+    idx_date = entetes.trouverIndex("
     for ligne in liste:
 
         colonnes = ligne.strip().split(entetes.separateur())
@@ -60,7 +60,8 @@ def construire_agregats_annuels(liste, entetes,
         renouvelable = (
             float(colonnes[idx_solaire]) +
             float(colonnes[idx_eolienne]) +
-            float(colonnes[idx_hydraulique])
+            float(colonnes[idx_hydraulique])+
+            float(colonnes[idx_Date])
         )
 
         totale = renouvelable + float(colonnes[idx_nucleaire])
@@ -76,6 +77,4 @@ def construire_agregats_annuels(liste, entetes,
         production_totale
     )
 
-
-  
 
