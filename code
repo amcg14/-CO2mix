@@ -23,7 +23,26 @@ class EntetesColonnes:
         index = index+1
         if i == nom_colonne:
             return(index)
-
+# 6. Graphiques et analyses à produire
+#6.1 Fonction tracer_série(…)
+import matplotlib.pyplot as pl
+def tracer_série(titre_graphique, titre_axe_X, titre_axe_Y, liste_donnees):
+    # Création de 3 séries de données artificielles
+    for i in range (len(liste_donnees)):
+        m=1
+        serie[m]=liste_donnees[i]
+        X[m]=(serie[m])[2]
+        Y[m]=(serie[m])[2]
+        plt.figure()
+        plt.plot(X[m],Y[m],label='serie[m] ')
+        plt.title("Exemple de visualisation")
+        plt.xlabel("titre_axe_X")
+        plt.ylabel("titre_axe_Y")
+        plt.grid(True)
+        plt.legend()
+        m+=1
+# Affichage du graphique
+plt.show()
 
 
 class AgregateurAnnuel:
