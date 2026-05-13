@@ -22,6 +22,60 @@ class EntetesColonnes:
         index = index+1
         if i == nom_colonne:
             return(index)
+def construire_agregats_annuels(liste, entetes,
+                                nom, dictionnaire):
+
+    consommation = AgregateurAnnuel()
+    production_renouvelable = AgregateurAnnuel()
+    production_totale = AgregateurAnnuel()
+
+    idx_region = entetes.trouverIndex("Code INSEE région")
+    idx_conso = entetes.trouverIndex("Consommation (MW)")
+    idx_solaire = entetes.trouverIndex("Solaire (MW)")
+    idx_eolienne = entetes.trouverIndex("Eolien (MW)")
+    idx_hydraulique = entetes.trouverIndex("Hydraulique (MW)")
+    idx_nucleaire = entetes.trouverIndex("Nucléaire (MW)")
+
+    for ligne in liste:
+
+        colonnes = ligne.strip().split(entetes.separateur())
+
+        region = colonnes[idx_region]
+
+        # filtrage région
+        if nom != "France":
+
+            code = dictionnaire[nom]
+
+            if region != code:
+                continue
+
+        # lecture consommation
+        try:
+            conso = float(colonnes[idx_conso])
+        except:
+            conso = 0
+
+        # productions
+        renouvelable = (
+            float(colonnes[idx_solaire]) +
+            float(colonnes[idx_eolienne]) +
+            float(colonnes[idx_hydraulique])
+        )
+
+        totale = renouvelable + float(colonnes[idx_nucleaire])
+
+        # ajout dans les agrégateurs
+        consommation.ajouter(conso)
+        production_renouvelable.ajouter(renouvelable)
+        production_totale.ajouter(totale)
+
+    return (
+        consommation,
+        production_renouvelable,
+        production_totale
+    )
+
 
   
 
