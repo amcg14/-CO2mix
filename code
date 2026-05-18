@@ -122,7 +122,7 @@ def construire_agregats_annuels(liste, entetes,
     return (
         consommation,
         production_renouvelable,
-        production_totale
+        production_totale)
 
 
 def tracer_série(titre_graphique, titre_axe_X, titre_axe_Y, liste_donnees):
