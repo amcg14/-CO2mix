@@ -45,7 +45,7 @@ class AgregateurAnnuel:
             self.__a.update({annee:new})
         
 
-        def obtenir_serie(self):
+      def obtenir_serie(self):
         donnes = []
         donnes.append(self.__tinfo)
         donnean = []
