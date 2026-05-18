@@ -1,92 +1,5 @@
+import unicodedata
 import matplotlib.pyplot as plt
-chemin_csv = "eco2mix_regional_journalier.csv"
-
-try:
-    with open(chemin_csv, "r") as f:
-        lignes = f.readlines()       
-except OSError as e:
-    raise OSError(f"Impossible d'ouvrir '{chemin_csv}': {e}")
-Traitement de lignes 
-
-
-#Fonction principale
-   
-
-def normaliser(nom):
-    # Supprime les accents, Passe en minuscule et ne garde que les lettres
-    sans_accent = unicodedata.normalize("NFD", nom)
-    sans_accent = "".join(
-        c for c in sans_accent if unicodedata.category(c) != "Mn"
-        )
-    return "".join(c for c in sans_accent.lower() if c.isalpha())
-    
-#test    
-#x= str(input("entrer mot"))
-# print( normaliser(x))
-
-# Autre méthode pou normaliser les noms
-def acc_minus(nom):
-    accents = { 'à':'a', 'á':'a', 'â':'a', 'ä':'a',
-        'è':'e', 'é':'e', 'ê':'e', 'ë':'e',
-        'ì':'i', 'í':'i', 'î':'i', 'ï':'i',
-        'ò':'o', 'ó':'o', 'ô':'o', 'ö':'o',
-        'ù':'u', 'ú':'u', 'û':'u', 'ü':'u',
-        'ç':'c',
-        'À':'A', 'É':'E'
-    }
-    resultat = ""
-    
-    for caracter in nom :
-        if caracter in accents :
-            resultat += accents[caracter]
-        else:
-            resultat += caracter
-    return resultat.lower()
-    
-            
-def onlyletter(nom):
-    resultat = ""
-    for caracter in nom :
-        if caracter.isalpha():
-            resultat += caracter
-    return acc_minus(resultat)
-#test
-x=str(input("entrer x"))
-print(onlyletter(x))
-
-
-
-    
-
-
-
-#Création du dictionnaire
-table_insee = {
-    normaliser("Île-de-France") : 11
-    normaliser("Centre-Val de Loire") : 24
-    normaliser("Bourgogne-Franche-Comté") : 27
-    normaliser("Normandie") : 28
-    normaliser("Hauts-de-France") : 32
-    normaliser("Grand Est") : 44
-    normaliser("Pays de la Loire") : 52
-    normaliser("Bretagne") : 53
-    normaliser("Nouvelle-Aquitaine") : 75
-    normaliser("Occitanie") : 76
-    normaliser("Auvergne-Rhône-Alpes") : 84
-    normaliser("Provence-Alpes-Côte d'Azur") : 93
-    normaliser("Corse") : 94
-    }
- 
-def lire_donnees(chemin_csv):    
-    try:
-        with open(chemin_csv, "r", encoding="utf-8-sig") as f:
-            lignes = f.readlines()
-    except OSError as e:
-        raise OSError(f"Impossible d'ouvrir '{chemin_csv}': {e}")
-    
-    entetes = EntetesColonnes(lignes[0])  
-    return lignes[1:], entetes
-
 class EntetesColonnes:
   def __init__(self,ligne1):
     self.__ligne = ligne1
@@ -110,20 +23,27 @@ class EntetesColonnes:
         index = index+1
         if i == nom_colonne:
             return(index)
+            
+"""
+for i in range(3,(len(self.__ligne))):
+      if self.__ligne[i] != "," and self.__ligne[i] != ";":
+        new = new + self.__ligne[i]
+      else:
+        s.append(new)
+        new = ""
+"""
 
-
-
+#value -|all lines - seperate by year  |2013 to 2024|
+#datavalue        
+#dictionary - year,sum 
 class AgregateurAnnuel:
     def __init__(self,zgeo,tinfo,annees,values):
         self.__zgeo = zgeo
         self.__tinfo = tinfo
-        self.__annees = annees
-        self.__values =values
         self.__a = dict()
         for i in range(0,len(annees)):
             self.__a.update({annees[i]:values[i]})
-
-                
+            
     def ajouter(self,new,annee):
         if annee in self.__a:
             x = self.__a[annee]
@@ -131,8 +51,8 @@ class AgregateurAnnuel:
         else:
             self.__a.update({annee:new})
         
-
-      def obtenir_serie(self):
+        #2d array
+    def obtenir_serie(self):
         donnes = []
         donnes.append(self.__tinfo)
         donnean = []
@@ -143,6 +63,7 @@ class AgregateurAnnuel:
         donnes.append(donnean)
         donnes.append(donneval)
         return(donnes)
+        
         
         
         
@@ -176,7 +97,7 @@ def construire_agregats_annuels(liste, entetes,
 
             code = dictionnaire[nom]
 
-            if region != code:
+            if float(region) != code:
                 continue
 
         # lecture consommation
@@ -209,7 +130,8 @@ def construire_agregats_annuels(liste, entetes,
     return (
         consommation,
         production_renouvelable,
-        production_totale)
+        production_totale
+    )
 
 
 def tracer_série(titre_graphique, titre_axe_X, titre_axe_Y, liste_donnees):
@@ -221,9 +143,9 @@ def tracer_série(titre_graphique, titre_axe_X, titre_axe_Y, liste_donnees):
         X=liste_donnees[1]
         Y=liste_donnees[2]
         plt.plot(X,Y)
-        plt.title("Exemple de visualisation")
-        plt.xlabel("titre_axe_X")
-        plt.ylabel("titre_axe_Y")
+        plt.title(titre_graphique)
+        plt.xlabel(titre_axe_X)
+        plt.ylabel(titre_axe_Y)
         plt.grid(True)
         plt.legend()
             
@@ -231,6 +153,95 @@ def tracer_série(titre_graphique, titre_axe_X, titre_axe_Y, liste_donnees):
     plt.show()
 
 
+#Fonction principale
+   
+def normaliser(nom):
+    # Supprime les accents, Passe en minuscule et ne garde que les lettres
+    sans_accent = unicodedata.normalize("NFD", nom)
+    sans_accent = "".join(
+        c for c in sans_accent if unicodedata.category(c) != "Mn"
+        )
+    return "".join(c for c in sans_accent.lower() if c.isalpha())
+    
+
+# Autre méthode pou normaliser les noms
+def acc_minus(nom):
+    accents = { 'à':'a', 'á':'a', 'â':'a', 'ä':'a',
+        'è':'e', 'é':'e', 'ê':'e', 'ë':'e',
+        'ì':'i', 'í':'i', 'î':'i', 'ï':'i',
+        'ò':'o', 'ó':'o', 'ô':'o', 'ö':'o',
+        'ù':'u', 'ú':'u', 'û':'u', 'ü':'u',
+        'ç':'c',
+        'À':'A', 'É':'E'
+    }
+    resultat = ""
+    for caracter in nom :
+        if caracter in accents :
+            resultat += accents[caracter]
+        else:
+            resultat += caracter
+    return resultat.lower()
+               
+def onlyletter(nom):
+    resultat = ""
+    for caracter in nom :
+        if caracter.isalpha():
+            resultat += caracter
+    return acc_minus(resultat)
+#test
+
+
+ 
+def lire_donnees(chemin_csv):    
+    try:
+        with open(chemin_csv, "r", encoding="utf-8-sig") as f:
+            lignes = f.readlines()
+    except OSError as e:
+        raise OSError(f"Impossible d'ouvrir '{chemin_csv}': {e}")
+    
+    entetes = EntetesColonnes(lignes[0])  
+    return lignes[1:], entetes
+
+       
+#Création du dictionnaire
+table_insee = {
+    normaliser("Île-de-France") : 11,
+    normaliser("Centre-Val de Loire") : 24,
+    normaliser("Bourgogne-Franche-Comté") : 27,
+    normaliser("Normandie") : 28,
+    normaliser("Hauts-de-France") : 32,
+    normaliser("Grand Est") : 44,
+    normaliser("Pays de la Loire") : 52,
+    normaliser("Bretagne") : 53,
+    normaliser("Nouvelle-Aquitaine") : 75,
+    normaliser("Occitanie") : 76,
+    normaliser("Auvergne-Rhône-Alpes") : 84,
+    normaliser("Provence-Alpes-Côte d'Azur") : 93,
+    normaliser("Corse") : 94
+    }        
+        
+        
+chemin_csv = "eco2mix_regional_journalier.csv"
+
+try:
+    file = open('eco2mix_regional_journalier.csv','r')
+    entetes = EntetesColonnes(file.readline())  
+except OSError as e:
+    raise OSError(f"Impossible d'ouvrir '{chemin_csv}': {e}")
+
+consommation,production_renouvelable,production_totale= construire_agregats_annuels(file, entetes,"normandie", table_insee)
+consommation.ajouter(2000,2015)
+donnesconso = consommation.obtenir_serie()
+donnesprodren = production_renouvelable.obtenir_serie()
+donnesprodtot = production_totale.obtenir_serie()
+file.close()        
+
+        
+        
+        
+tracer_série("Consommation","Annee","Consommation (MW)",donnesconso)        
+tracer_série("production renouvelable","Annee","",donnesprodren)
+tracer_série("production totale","Annee","",donnesprodtot) 
 
 
 
