@@ -1,5 +1,6 @@
 import unicodedata
 import matplotlib.pyplot as plt
+
 class EntetesColonnes:
   def __init__(self,ligne1):
     self.__ligne = ligne1
