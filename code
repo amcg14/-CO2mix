@@ -1,4 +1,91 @@
 import matplotlib.pyplot as plt
+chemin_csv = "eco2mix_regional_journalier.csv"
+
+try:
+    with open(chemin_csv, "r") as f:
+        lignes = f.readlines()       
+except OSError as e:
+    raise OSError(f"Impossible d'ouvrir '{chemin_csv}': {e}")
+Traitement de lignes 
+
+
+#Fonction principale
+   
+
+def normaliser(nom):
+    # Supprime les accents, Passe en minuscule et ne garde que les lettres
+    sans_accent = unicodedata.normalize("NFD", nom)
+    sans_accent = "".join(
+        c for c in sans_accent if unicodedata.category(c) != "Mn"
+        )
+    return "".join(c for c in sans_accent.lower() if c.isalpha())
+    
+#test    
+#x= str(input("entrer mot"))
+# print( normaliser(x))
+
+# Autre méthode pou normaliser les noms
+def acc_minus(nom):
+    accents = { 'à':'a', 'á':'a', 'â':'a', 'ä':'a',
+        'è':'e', 'é':'e', 'ê':'e', 'ë':'e',
+        'ì':'i', 'í':'i', 'î':'i', 'ï':'i',
+        'ò':'o', 'ó':'o', 'ô':'o', 'ö':'o',
+        'ù':'u', 'ú':'u', 'û':'u', 'ü':'u',
+        'ç':'c',
+        'À':'A', 'É':'E'
+    }
+    resultat = ""
+    
+    for caracter in nom :
+        if caracter in accents :
+            resultat += accents[caracter]
+        else:
+            resultat += caracter
+    return resultat.lower()
+    
+            
+def onlyletter(nom):
+    resultat = ""
+    for caracter in nom :
+        if caracter.isalpha():
+            resultat += caracter
+    return acc_minus(resultat)
+#test
+x=str(input("entrer x"))
+print(onlyletter(x))
+
+
+
+    
+
+
+
+#Création du dictionnaire
+table_insee = {
+    normaliser("Île-de-France") : 11
+    normaliser("Centre-Val de Loire") : 24
+    normaliser("Bourgogne-Franche-Comté") : 27
+    normaliser("Normandie") : 28
+    normaliser("Hauts-de-France") : 32
+    normaliser("Grand Est") : 44
+    normaliser("Pays de la Loire") : 52
+    normaliser("Bretagne") : 53
+    normaliser("Nouvelle-Aquitaine") : 75
+    normaliser("Occitanie") : 76
+    normaliser("Auvergne-Rhône-Alpes") : 84
+    normaliser("Provence-Alpes-Côte d'Azur") : 93
+    normaliser("Corse") : 94
+    }
+ 
+def lire_donnees(chemin_csv):    
+    try:
+        with open(chemin_csv, "r", encoding="utf-8-sig") as f:
+            lignes = f.readlines()
+    except OSError as e:
+        raise OSError(f"Impossible d'ouvrir '{chemin_csv}': {e}")
+    
+    entetes = EntetesColonnes(lignes[0])  
+    return lignes[1:], entetes
 
 class EntetesColonnes:
   def __init__(self,ligne1):
