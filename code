@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 class EntetesColonnes:
   def __init__(self,ligne1):
     self.__ligne = ligne1
-    print(self.__ligne)
 
   def separateur(self):
     s = []
@@ -25,18 +24,7 @@ class EntetesColonnes:
         if i == nom_colonne:
             return(index)
             
-"""
-for i in range(3,(len(self.__ligne))):
-      if self.__ligne[i] != "," and self.__ligne[i] != ";":
-        new = new + self.__ligne[i]
-      else:
-        s.append(new)
-        new = ""
-"""
 
-#value -|all lines - seperate by year  |2013 to 2024|
-#datavalue        
-#dictionary - year,sum 
 class AgregateurAnnuel:
     def __init__(self,zgeo,tinfo,annees,values):
         self.__zgeo = zgeo
@@ -65,10 +53,7 @@ class AgregateurAnnuel:
         donnes.append(donneval)
         return(donnes)
         
-        
-        
-        
-        
+           
 def construire_agregats_annuels(liste, entetes,
                                 nom, dictionnaire):
  
@@ -88,9 +73,7 @@ def construire_agregats_annuels(liste, entetes,
     for ligne in liste:
 
         colonnes = ligne.strip().split(";")
-        
-        
-#entetes.separateur()
+             
         region = colonnes[idx_region]
 
         # filtrage région
@@ -126,19 +109,15 @@ def construire_agregats_annuels(liste, entetes,
     consommation = AgregateurAnnuel(nom,"consommation",[2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024],sommeconso)
     production_renouvelable = AgregateurAnnuel(nom,"production renouvelable",[2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024],sommereno)
     production_totale = AgregateurAnnuel(nom,"production totale",[2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024],sommeprod)
-        # ajout dans les agrégateurs
 
-    return (
-        consommation,
-        production_renouvelable,
-        production_totale
-    )
+    return (consommation,
+            production_renouvelable,
+            production_totale)
 
 
 def tracer_série(titre_graphique, titre_axe_X, titre_axe_Y, liste_donnees):
     # Création de 3 séries de données artificielles
     plt.figure()
-    print(liste_donnees)
     for i in range (len(liste_donnees)):
         m=0
         X=liste_donnees[1]
@@ -189,19 +168,14 @@ def onlyletter(nom):
         if caracter.isalpha():
             resultat += caracter
     return acc_minus(resultat)
-#test
-
-
  
-def lire_donnees(chemin_csv):    
+def lire_donnes(chemin_csv):    
     try:
-        with open(chemin_csv, "r", encoding="utf-8-sig") as f:
-            lignes = f.readlines()
+        file = open('eco2mix_regional_journalier.csv','r')
+        entetes = EntetesColonnes(file.readline())  
     except OSError as e:
-        raise OSError(f"Impossible d'ouvrir '{chemin_csv}': {e}")
-    
-    entetes = EntetesColonnes(lignes[0])  
-    return lignes[1:], entetes
+        raise OSError(f"Impossible d'ouvrir '{chemin_csv}': {e}") 
+    return file, entetes
 
        
 #Création du dictionnaire
@@ -223,12 +197,8 @@ table_insee = {
         
         
 chemin_csv = "eco2mix_regional_journalier.csv"
+file,entetes =lire_donnes(chemin_csv)
 
-try:
-    file = open('eco2mix_regional_journalier.csv','r')
-    entetes = EntetesColonnes(file.readline())  
-except OSError as e:
-    raise OSError(f"Impossible d'ouvrir '{chemin_csv}': {e}")
 
 consommation,production_renouvelable,production_totale= construire_agregats_annuels(file, entetes,"normandie", table_insee)
 consommation.ajouter(2000,2015)
@@ -243,6 +213,3 @@ file.close()
 tracer_série("Consommation","Annee","Consommation (MW)",donnesconso)        
 tracer_série("production renouvelable","Annee","",donnesprodren)
 tracer_série("production totale","Annee","",donnesprodtot) 
-
-
-
