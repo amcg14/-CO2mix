@@ -40,7 +40,6 @@ class AgregateurAnnuel:
         else:
             self.__a.update({annee:new})
         
-        #2d array
     def obtenir_serie(self):
         donnes = []
         donnes.append(self.__tinfo)
