@@ -103,9 +103,6 @@ def construire_agregats_annuels(liste, entetes,
                 sommereno[i] += renouvelable
                 sommeprod[i] += totale
         
-                
-                
-        
     consommation = AgregateurAnnuel(nom,"consommation",[2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024],sommeconso)
     production_renouvelable = AgregateurAnnuel(nom,"production renouvelable",[2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024],sommereno)
     production_totale = AgregateurAnnuel(nom,"production totale",[2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024],sommeprod)
